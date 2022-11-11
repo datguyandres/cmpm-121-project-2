@@ -4,10 +4,10 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class ChangeCameraButton : MonoBehaviour
+public class ChangeLightButton : MonoBehaviour
 {
     // create camera list that can be updated in the inspector
-    public List<Camera> Cameras;
+    public List<Light> Lights;
 
     // create frame and button variables 
     private VisualElement frame;
@@ -24,28 +24,47 @@ public class ChangeCameraButton : MonoBehaviour
         // get the button, which is nested in the frame
         button = frame.Q<Button>("Button");
         // create event listener that calls ChangeCamera() when pressed
-        button.RegisterCallback<ClickEvent>(ev => ChangeCamera());
+        button.RegisterCallback<ClickEvent>(ev => ChangeLight());
     }
 
     // initialize click count
     int click = 0;
-    private void ChangeCamera(){
-        EnableCamera(click);
+    private void ChangeLight(){
+        EnableLight(click);
         click++;
         // reset counter so it is not out of bounds (only have 4 cameras)
-        if(click > 3){
+        if(click >2){
             click = 0;
         }
     }
 
-    private void EnableCamera(int n)
+    private void EnableLight(int n)
     {
+        Debug.Log("hello");
         // disable each of the cameras
-        Cameras.ForEach(cam => cam.enabled = false);
+        if (click == 0)
+        {
+            Lights.ForEach(light => light.enabled = false);
+            Lights.ForEach(light => Debug.Log(light.name + light.enabled));
+        }
+        if (click == 2)
+        {
+            Debug.Log("cheese");
+            Lights.ForEach(light => light.enabled = true);
+            Lights.ForEach(light => light.intensity = light.intensity * 2);
+
+        }
+
+        if (click == 1)
+        {
+            Debug.Log("cheese");
+            Lights.ForEach(light => light.enabled = true);
+            Lights.ForEach(light => light.intensity = light.intensity/2);
+        }
         // Cameras.ForEach(cam => cam.depth = 0);
 
         // enable the selected camera
-        Cameras[n].enabled = true;
+        //Cameras[n].enabled = true;
         // Cameras[n].depth = 1;
 
     }
